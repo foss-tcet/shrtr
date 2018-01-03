@@ -1,0 +1,27 @@
+{
+  "name": "shrtr",
+  "version": "0.0.1",
+  "description": "An API Based URL Shortener. Edit",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vkartik97/shrtr.git"
+  },
+  "keywords": [
+    "nodejs",
+    "shortener",
+    "javascript"
+  ],
+  "author": "Kartik Verma (vkartik97)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/vkartik97/shrtr/issues"
+  },
+  "homepage": "https://github.com/vkartik97/shrtr#readme",
+  "dependencies": {
+    "express": "^4.16.2"
+  }
+}
