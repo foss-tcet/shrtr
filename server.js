@@ -6,6 +6,9 @@ const gen = require('./routes/gen')
 
 const db = require('./configs/db')
 
+app.set('view engine', 'hbs')
+app.set('views', 'templates')
+
 app.use("/", express.static(__dirname + "/static"));
 
 app.use('/includes', express.static(__dirname + '/includes'));
@@ -30,7 +33,14 @@ app.get('/:url', (req, res, next) => {
             res.send(error)
             throw error
         }
-        res.redirect(concatHTTP(results[0].url))
+        let url = results[0].url
+        db.query("UPDATE shrtr_db_main SET accessed = accessed + 1 WHERE sh_url = " + db.escape(url), (error, results, fields) => {
+            if (error){
+                res.send(error)
+                throw error
+            }
+            res.redirect(concatHTTP(url))
+        })
     })
     
 })
