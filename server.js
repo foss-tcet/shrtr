@@ -2,11 +2,15 @@ const express = require('express')
 
 const app = express()
 
+const gen = require('./routes/gen')
+
 const db = require('./configs/db')
 
 app.use("/", express.static(__dirname + "/static"));
 
 app.use('/includes', express.static(__dirname + '/includes'));
+
+app.use('/g', gen)
 
 function concatHTTP(url) {
     if (!/^(?:f|ht)tps?\:\/\//.test(url)) {
