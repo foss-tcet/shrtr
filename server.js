@@ -6,6 +6,8 @@ const gen = require('./routes/gen')
 
 const db = require('./configs/db')
 
+const SERVER_PORT = process.env.PORT || 3333
+
 app.set('view engine', 'hbs')
 app.set('views', 'templates')
 

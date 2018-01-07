@@ -4,7 +4,7 @@
   "description": "An API Based URL Shortener. Edit",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node server.js"
   },
   "repository": {
     "type": "git",
@@ -27,5 +27,9 @@
     "hbs": "^4.0.1",
     "mysql": "^2.15.0",
     "randomstring": "^1.1.5"
+  },
+  "engines":{
+    "node": "9",
+    "npm" : "5"
   }
 }
