@@ -6,8 +6,6 @@ const hbs = require('handlebars')
 
 const random = require('randomstring')
 
-const site_info = require('../includes/data/details')
-
 route.get('/:url(*)', (req, res, next) => {
     const db_query = "Select sh_url, url from shrtr_db_main where url = " + db.escape(req.params.url)
     db.query(db_query, (error, results, fields) => {
@@ -25,7 +23,10 @@ route.get('/:url(*)', (req, res, next) => {
             }
 
             data = {
-                "url":concatHTTP(results[0].url), "sh_url": site_info.baseURL+ "/" +results[0].sh_url, "base": site_info.baseURL
+                "url":concatHTTP(results[0].url), 
+                "sh_url": results[0].sh_url, 
+                "host": req.get('host'),
+                "protocol": req.protocol
             }
             return res.render('gen', {data})
         }
@@ -52,7 +53,10 @@ route.get('/:url(*)', (req, res, next) => {
                         }
 
                         data = {
-                            "url":concatHTTP(url), "sh_url": site_info.baseURL+ "/" +newURL, "base": site_info.baseURL
+                            "url":concatHTTP(url), 
+                            "sh_url": newURL, 
+                            "host": req.get('host'),
+                            "protocol": req.protocol
                         }
                         return res.render('gen', {data})
                     }
