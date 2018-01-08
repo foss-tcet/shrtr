@@ -6,7 +6,7 @@ const gen = require('./routes/gen')
 
 const db = require('./configs/db')
 
-const SERVER_PORT = process.env.PORT || 3333
+const SERVER_PORT = process.env.PORT || 8080
 
 app.set('view engine', 'hbs')
 app.set('views', 'templates')
@@ -35,14 +35,19 @@ app.get('/:url', (req, res, next) => {
             res.send(error)
             throw error
         }
-        let url = results[0].url
-        db.query("UPDATE shrtr_db_main SET accessed = accessed + 1 WHERE sh_url = " + db.escape(url), (error, results, fields) => {
-            if (error){
-                res.send(error)
-                throw error
-            }
-            res.redirect(concatHTTP(url))
-        })
+        if(results.length > 0){
+            let url = results[0].url
+            let sh_url = results[0].sh_url
+            db.query("UPDATE shrtr_db_main SET accessed = accessed + 1 WHERE sh_url = " + db.escape(sh_url), (error, results, fields) => {
+                if (error){
+                    res.send(error)
+                    throw error
+                }
+                res.redirect(concatHTTP(url))
+            })
+        }
+        else
+            next()
     })
     
 })
@@ -53,4 +58,4 @@ app.use((req, res, next) => {
     res.send("404 Error!")
 })
 
-app.listen(8080);
+app.listen(SERVER_PORT);
