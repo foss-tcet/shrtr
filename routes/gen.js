@@ -6,6 +6,70 @@ const hbs = require('handlebars')
 
 const random = require('randomstring')
 
+route.get('/', (req, res, next) => {
+    if(!req.query.url)
+    {
+        res.send("Try again!")
+    }
+    else
+    {
+        const db_query = "Select sh_url, url from shrtr_db_main where url = " + db.escape(req.query.url)
+        db.query(db_query, (error, results, fields) => {
+        if(error){
+            res.send(error)
+            throw error
+        }
+        if(results.length > 0)
+        {
+            function concatHTTP(url) {
+                if (!/^(?:f|ht)tps?\:\/\//.test(url)) {
+                    url = "http://" + url;
+                }
+                return url;
+            }
+
+            data = {
+                "url":concatHTTP(results[0].url), 
+                "short_url": req.get('host') +  "/" +results[0].sh_url
+            }
+            return res.send(data)
+        }
+        else
+        {
+            function addNewURL() {
+                let url = req.query.url
+                let newURL = random.generate(5)
+                let u_query = "Insert into shrtr_db_main (sh_url, url) values ("+db.escape(newURL)+", "+db.escape(url)+")";   
+                db.query(u_query, (error, results, fields) => {
+                    if (error) {
+            
+                        if (error.code !== 'ER_DUP_ENTRY')
+                            throw error
+                        return addNewURL();
+                    }
+                    else {
+                        function concatHTTP(url) {
+                            if (!/^(?:f|ht)tps?\:\/\//.test(url)) {
+                                url = "http://" + url;
+                            }
+                            return url;
+                        }
+
+                        data = {
+                            "url":concatHTTP(url), 
+                            "short_url": req.get('host')+"/"+newURL,
+                        }
+                        return res.send(data)
+                    }
+            
+                })
+            }
+            addNewURL();
+        }
+    })
+    }
+})
+
 route.get('/:url(*)', (req, res, next) => {
     const db_query = "Select sh_url, url from shrtr_db_main where url = " + db.escape(req.params.url)
     db.query(db_query, (error, results, fields) => {
